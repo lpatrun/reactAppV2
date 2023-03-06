@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect, useCallback } from 'react'
+import axios from 'axios'
+import './App.css'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [joke, setJoke] = useState('')
+
+    const getData = useCallback(async () => {
+        const response = await axios.get(
+            'https://api.chucknorris.io/jokes/random'
+        )
+        setJoke(response.data.value)
+    }, [])
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+    return (
+        <div className="">
+            <p>{joke}</p>
+            <button onClick={getData}>Refresh joke</button>
+        </div>
+    )
 }
 
-export default App;
+export default App
